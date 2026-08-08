@@ -20,6 +20,9 @@ from audio_engine import SegmentTiming
 
 FRAME_SIZE = (1080, 1920)
 AMBIENT_GAIN = 10 ** (-18 / 20)
+SUBTITLE_BOX_WIDTH = 860
+SUBTITLE_TOP = 1050
+SUBTITLE_SHADOW_OFFSET = 7
 SUBTITLE_FONT_CANDIDATES = (
     Path("/System/Library/Fonts/Supplemental/Georgia Bold.ttf"),
     Path("C:/Windows/Fonts/georgiab.ttf"),
@@ -65,13 +68,13 @@ def _subtitle_clip(timing: SegmentTiming) -> TextClip:
             stroke_color="#262626",
             stroke_width=3,
             method="caption",
-            size=(920, None),
+            size=(SUBTITLE_BOX_WIDTH, None),
             text_align="center",
             margin=(24, 18),
         )
         .with_start(timing.start)
         .with_duration(duration)
-        .with_position(("center", 1370))
+        .with_position(("center", SUBTITLE_TOP))
     )
 
 
@@ -87,14 +90,14 @@ def _subtitle_shadow_clip(timing: SegmentTiming) -> TextClip:
             stroke_color="#202020",
             stroke_width=3,
             method="caption",
-            size=(920, None),
+            size=(SUBTITLE_BOX_WIDTH, None),
             text_align="center",
             margin=(24, 18),
         )
         .with_opacity(0.68)
         .with_start(timing.start)
         .with_duration(duration)
-        .with_position(("center", 1377))
+        .with_position(("center", SUBTITLE_TOP + SUBTITLE_SHADOW_OFFSET))
     )
 
 
