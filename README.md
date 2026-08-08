@@ -1,4 +1,6 @@
-# Free YouTube Horror Video Generator
+# Free YouTube Video Generator
+
+Currently for Horror videos cos why not
 
 A local-first Python CLI that creates a short creepypasta, narrates it, downloads
 matching vertical artwork, generates its own ambient drone, burns synchronized
