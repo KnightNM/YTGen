@@ -47,3 +47,60 @@ python main.py --topic "The last train had no driver" --privacy unlisted
 
 Use `--skip-upload` to guarantee a local-only run. The finished file is written to
 `output/video/final_short.mp4`.
+
+## Hybrid local automation (Codex subscription)
+
+The `hybrid-local-automation` branch adds a human-in-the-loop media workflow. Story
+generation uses your locally installed Codex CLI and its ChatGPT OAuth session, not
+an OpenAI API key. Media assembly and YouTube upload remain local.
+
+First install and authenticate Codex CLI, then prepare a job:
+
+```bash
+codex login
+codex login status
+python hybrid_main.py --phase prepare --topic "The car that followed me"
+```
+
+The command creates a unique folder under `output/media_inbox/`. It contains one
+numbered prompt per scene. Generate each scene in the web tool you choose and save
+the download beside its prompt as `scene_001.png`, `scene_002.mp4`, and so on.
+Images and video clips can be mixed; they are uniformly scaled and center-cropped
+to 9:16, never stretched.
+
+Render and optionally upload the prepared job:
+
+```bash
+python hybrid_main.py --phase render
+python hybrid_main.py --phase render --privacy unlisted
+python hybrid_main.py --phase render --skip-upload
+```
+
+`render` uses the most recently prepared inbox unless `--media-dir` is supplied.
+For a single long-running terminal process, `--phase all` prepares the job and
+watches the inbox for up to an hour:
+
+```bash
+python hybrid_main.py --phase all --topic "Something stood under the streetlight"
+```
+
+This project deliberately does not scrape or automate protected ChatGPT, Sora, or
+Gemini web interfaces. Browser layouts and anti-bot checks are fragile, and such
+automation can violate provider terms. The numbered inbox keeps the paid-API-free
+workflow reliable while preserving an explicit human action for web generation.
+
+## Gated workflow controller
+
+The hybrid branch includes a stateful controller used by the bundled Codex skill:
+
+```bash
+python workflow.py start --topic "The car that followed me"
+python workflow.py status
+python workflow.py render
+python workflow.py upload --confirm-upload --privacy private
+```
+
+`status` reports the current stage and a concrete next-action nudge. `render` is
+always local. `upload` refuses to run without the explicit confirmation flag and
+refuses duplicate uploads after a YouTube URL has been recorded. The project-local
+skill lives at `.agents/skills/youtube-horror-workflow/`.

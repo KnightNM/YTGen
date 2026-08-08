@@ -101,6 +101,7 @@ class Story:
 
 STORY_SCHEMA = {
     "type": "object",
+    "additionalProperties": False,
     "properties": {
         "title": {"type": "string"},
         "description": {"type": "string"},
