@@ -1,0 +1,4 @@
+interface:
+  display_name: "YouTube Horror Workflow"
+  short_description: "Run a gated local horror-video pipeline"
+  default_prompt: "Use $youtube-horror-workflow to create a new horror Short from a topic and guide me through each approval gate."

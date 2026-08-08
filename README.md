@@ -88,3 +88,19 @@ This project deliberately does not scrape or automate protected ChatGPT, Sora, o
 Gemini web interfaces. Browser layouts and anti-bot checks are fragile, and such
 automation can violate provider terms. The numbered inbox keeps the paid-API-free
 workflow reliable while preserving an explicit human action for web generation.
+
+## Gated workflow controller
+
+The hybrid branch includes a stateful controller used by the bundled Codex skill:
+
+```bash
+python workflow.py start --topic "The car that followed me"
+python workflow.py status
+python workflow.py render
+python workflow.py upload --confirm-upload --privacy private
+```
+
+`status` reports the current stage and a concrete next-action nudge. `render` is
+always local. `upload` refuses to run without the explicit confirmation flag and
+refuses duplicate uploads after a YouTube URL has been recorded. The project-local
+skill lives at `.agents/skills/youtube-horror-workflow/`.
